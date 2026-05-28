@@ -19,6 +19,7 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }){
     const [token, setTokenState] = useState(getToken());
+    
     async function login(email, password) {
         const data = await apiFetch('/api/auth/login', {
             method: 'POST',
@@ -31,6 +32,9 @@ export function AuthProvider({ children }){
 
         return data;
     }
+
+    const value = { token, login, isAuthed: !!token };
+    return <AuthContext.Provider value={value}>{ children }</AuthContext.Provider>;
 }
 
 export function useAuth() {

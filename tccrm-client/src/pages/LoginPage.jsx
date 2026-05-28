@@ -21,7 +21,7 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
-            await login(email, password);
+            await login(username, password);
             nav(`/agent_dashboard`);
         } catch (err) {
             setError(err.message);
@@ -33,7 +33,7 @@ export default function LoginPage() {
     return (
         <>
             <UnauthNavbar onMenuClick={ () => setOpen(true) } />
-        
+    
             <Container
                 maxWidth='md'
                 sx={{
