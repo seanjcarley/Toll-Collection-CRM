@@ -10,5 +10,14 @@ async function findAgentByUsername(username) {
     return rows[0] || null;
 }
 
+// reset agent password
+async function resetPassword(password, id) {
+    console.log('user,models: ', password);
+    const [results] = await db.query(
+        `call sp_ResetAgentPassword(?, ?)`, [password, id]
+    );
+
+    return results[0] || null
+}
 
 module.exports = { findAgentByUsername };
