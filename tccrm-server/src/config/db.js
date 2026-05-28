@@ -12,4 +12,6 @@ const db = mysql.createPool({
     queueLimit: 0,
 });
 
+// console.log(db)
+
 module.exports = { db };
