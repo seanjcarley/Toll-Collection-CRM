@@ -8,6 +8,7 @@ const { findAgentByUsername, resetPassword } = require('../models/users.model');
 // agent login 
 const login = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
+    console.log(username, password);
     const user = await findAgentByUsername(username);
     console.log(user);
 
@@ -42,4 +43,4 @@ const reset_password = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { testDatabase };
+module.exports = { login, reset_password };

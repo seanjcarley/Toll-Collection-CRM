@@ -19,12 +19,14 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }){
     const [token, setTokenState] = useState(getToken());
+    // console.log(token)
     
-    async function login(email, password) {
+    async function login(username, password) {
+        // console.log(username, password)
         const data = await apiFetch('/api/auth/login', {
             method: 'POST',
             auth: false,
-            body: { email, password },
+            body: { username, password },
         });
 
         storeToken(data.token, data.id);

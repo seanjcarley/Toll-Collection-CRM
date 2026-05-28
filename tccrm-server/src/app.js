@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const { env } = require('./config/env');
 const { db } = require('./config/db');
 
+const authRoutes = require('./routes/auth.routes');
+
 const app = express();
 app.use(helmet());
 app.use(express.json());
@@ -23,5 +25,7 @@ app.get('/api/test_9721', async (req, res) => {
     const [rows] = await db.query('select * from national_vehicle_file');
     res.json(rows);
 })
+
+app.use('/api/auth', authRoutes)
 
 module.exports = { app };

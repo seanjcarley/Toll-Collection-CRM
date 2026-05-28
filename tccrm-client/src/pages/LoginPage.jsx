@@ -21,6 +21,8 @@ export default function LoginPage() {
         setLoading(true);
 
         try {
+            console.log('Username: ',username)
+            console.log('Password: ',password)
             await login(username, password);
             nav(`/agent_dashboard`);
         } catch (err) {
