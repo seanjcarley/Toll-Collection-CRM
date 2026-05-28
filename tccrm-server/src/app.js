@@ -4,6 +4,7 @@ const helmet = require('helmet');
 
 const { env } = require('./config/env');
 const { db } = require('./config/db');
+const { errorHandler } = require('./middleware/errorHandler');
 
 const authRoutes = require('./routes/auth.routes');
 
@@ -27,5 +28,7 @@ app.get('/api/test_9721', async (req, res) => {
 })
 
 app.use('/api/auth', authRoutes)
+
+app.use(errorHandler);
 
 module.exports = { app };

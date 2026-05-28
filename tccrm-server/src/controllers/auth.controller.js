@@ -19,7 +19,7 @@ const login = asyncHandler(async (req, res) => {
     }
     
     if (user.ISACTIVE === 0) {
-        const err = new Error('Please use the forgot password page to reset your password!');
+        const err = new Error('Please reset your password!');
         err.statusCode = 520;
         throw err;
     }
