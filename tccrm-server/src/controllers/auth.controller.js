@@ -8,7 +8,7 @@ const { findAgentByUsername, resetPassword } = require('../models/users.model');
 // agent login 
 const login = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
-    const user = await findAgentByUsername(email);
+    const user = await findAgentByUsername(username);
     console.log(user);
 
     if (!user) {
@@ -16,9 +16,11 @@ const login = asyncHandler(async (req, res) => {
         err.statusCode = 409;
         throw err;
     }
-
+    
     if (user.ISACTIVE === 0) {
-
+        const err = new Error('Please use the forgot password page to reset your password!');
+        err.statusCode = 520;
+        throw err;
     }
 
     const token = jwt.sign(
