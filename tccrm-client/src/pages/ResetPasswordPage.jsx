@@ -23,7 +23,7 @@ export default function ResetPasswordPage() {
         setLoading(true);
 
         try{
-            if (confirmPassword === Password) {
+            if (confirmPassword === password) {
                 const payload = {
                     password: password,
                     id: id,

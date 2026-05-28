@@ -37,9 +37,10 @@ const login = asyncHandler(async (req, res) => {
 // reset agent password
 const reset_password = asyncHandler(async (req, res) => {
     const { password, id } = req.body;
+    console.log(password, id)
     const passwordHash = await bcrypt.hash(password, 10);
     console.log(passwordHash);
-    const results = await resetPassword
+    const results = await resetPassword(passwordHash, id)
 })
 
 
