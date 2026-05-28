@@ -35,7 +35,12 @@ export function AuthProvider({ children }){
         return data;
     }
 
-    const value = { token, login, isAuthed: !!token };
+    function logout() {
+        clearToken();
+        setTokenState(null);
+    }
+
+    const value = { token, login, logout, isAuthed: !!token };
     return <AuthContext.Provider value={value}>{ children }</AuthContext.Provider>;
 }
 

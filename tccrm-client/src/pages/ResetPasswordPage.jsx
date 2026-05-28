@@ -1,30 +1,42 @@
 import React, { useState } from "react";
 import { Alert, Button, Container, Paper, Stack, TextField, 
     Typography } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/authContext";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/authContext"
+import { apiFetch } from "../api/client"
 import UnauthNavbar from "../components/UnauthNavbar";
+import Validator from "validator";
 
-export default function LoginPage() {
-    const { login } = useAuth();
+export default function ResetPasswordPage() {
+    const { logout } = useAuth();
     const nav = useNavigate();
 
-    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const id = localStorage.getItem('id');
     const [loading, setLoading] = useState('');
     const [error, setError] = useState('');
-    const [open, setOpen] = useState(false);
 
-    async function onSubmit (e) {
+    async function onSubmit(e) {
         e.preventDefault();
         setError('');
         setLoading(true);
 
-        try {
-            console.log('Username: ',username)
-            console.log('Password: ',password)
-            await login(username, password);
-            nav(`/agent_dashboard`);
+        try{
+            if (confirmPassword === Password) {
+                const payload = {
+                    password: password,
+                    id: id,
+                }
+
+                await apiFetch('/api/auth/reset_password', {
+                    method: 'POST',
+                    body: payload,
+                })
+
+                await logout();
+                nav('/');
+            }
         } catch (err) {
             setError(err.message);
         } finally {
@@ -34,8 +46,8 @@ export default function LoginPage() {
 
     return (
         <>
-            <UnauthNavbar onMenuClick={ () => setOpen(true) } />
-    
+            <UnauthNavbar />
+            
             <Container
                 maxWidth='md'
                 sx={{
@@ -51,17 +63,29 @@ export default function LoginPage() {
                 >
                     <Typography
                         variant='h3'
-                        align='center'
+                        align='canter'
                         color='primary'
                         sx={{
                             mt: 2,
                         }}
                     >
-                        Login
+                        Reset Password
                     </Typography>
+                    <Typography
+                        variant="caption"
+                        align="center"
+                        color="secondary"
+                        sx={{
+                            mt:2,
+                        }}
+                    >
+                        Enter your new password below.
+                    </Typography>
+
                     { error && (
                         <Alert severity='error' sx={{ mt: 2, }}>{error}</Alert>
                     )}
+
                     <Stack
                         component='form'
                         spacing={2}
@@ -76,8 +100,9 @@ export default function LoginPage() {
                             sx={{
                                 mt: 3,
                             }}
-                            label='Username'
-                            onChange={ e => setUsername(e.target.value) }
+                            type='password'
+                            label='Password'
+                            onChange={ e => setPassword(e.target.value) }
                         />
                         <TextField
                             fullWidth
@@ -85,9 +110,9 @@ export default function LoginPage() {
                             sx={{
                                 mt: 3,
                             }}
-                            label='Password'
+                            label='Confirm Password'
                             type='password'
-                            onChange={ e => setPassword(e.target.value) }
+                            onChange={ e => setConfirmPassword(e.target.value) }
                         />
                         <Button
                             variant='contained'
@@ -98,24 +123,11 @@ export default function LoginPage() {
                             type='submit'
                             disabled={ loading }
                         >
-                            { loading ? 'Logging in...' : 'Login'}
-                        </Button>
-                        <Button
-                            variant='outlined'
-                            color='secondary'
-                            sx={{
-                                mt: 2,
-                            }}
-                            type='submit'
-                            disabled={ loading }
-                            component={ Link }
-                            to='/reset_password'
-                        >
-                            Reset Password
+                            { loading ? 'Submitting...' : 'Submit'}
                         </Button>
                     </Stack>
                 </Paper>
             </Container>
         </>
-    )
+    );
 }

@@ -19,4 +19,4 @@ async function resetPassword(password, id) {
     return results[0] || null
 }
 
-module.exports = { findAgentByUsername };
+module.exports = { findAgentByUsername, resetPassword };
