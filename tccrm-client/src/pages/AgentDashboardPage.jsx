@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, Card, CircularProgress, Container, Grid, Paper, 
+    Typography } from "@mui/material";
 import { useAuth } from '../auth/authContext';
 import { apiFetch } from "../api/client";
 import { Link, useNavigate } from "react-router-dom";
 import AuthNavbar from "../components/AuthNavbar";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 export default function AgentDashboardPage() {
     const { logout, isAuthed } = useAuth();
@@ -55,39 +62,281 @@ export default function AgentDashboardPage() {
     return(
         <>
             <AuthNavbar onMenuClick={ () => StereoPannerNode(true) }/>
-            <Typography
-                variant='h2'
+            <Box
                 align='center'
-                color='secondary'
                 sx={{
+                    width: '100%',
                     mt: 2,
+                    placeItems: 'center',
+                    mx: 'auto'
                 }}
             >
-                Agent Dashboard
-            </Typography>
-            <Typography
-                variant="h4"
-                align="center"
-                color="secondary"
-                sx={{
-                    mt:2,
-                }}
-            >
-                Hello {agentDetails.FIRSTNAME} {agentDetails.SURNAME}
-            </Typography>
-            <Button
-                variant='contained'
-                color='primary'
-                sx={{
-                    my: 1,
-                }}
-                onClick={() => {
-                    logout();
-                    nav('/');
-                }}
-            >
-                Logout
-            </Button>
+                <Paper
+                    sx={{
+                        p: 5,
+                    }}
+                >
+                    <Typography
+                        variant='h2'
+                        align='center'
+                        color='secondary'
+                        sx={{
+                            mt: 2,
+                        }}
+                    >
+                        Agent Dashboard
+                    </Typography>
+                    <Typography
+                        variant="h4"
+                        align="center"
+                        color="secondary"
+                        sx={{
+                            mt:2,
+                        }}
+                    >
+                        Hello {agentDetails.FIRSTNAME} {agentDetails.SURNAME}
+                    </Typography>
+                </Paper>
+            </Box>
+                <Grid
+                    Container
+                    spacing={1}
+                >
+                    <Grid size={{xs: 12, sm:4}}>
+                        <Card
+                            align='center'
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column',
+                                height: '100%',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <TableContainer
+                                component={Paper}
+                                sx={{
+                                    width: '90%',
+                                    mt: 1,
+                                }}
+                                key='crd1_table_container'
+                            >
+                                <Table key='crd1_table'>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell 
+                                                colSpan={3}
+                                                align='center'
+                                                sx={{
+                                                    py: 1
+                                                }}
+                                            >
+                                                <Typography 
+                                                    variant='h5'
+                                                    sx = {{
+                                                        mt: 1,
+                                                    }}
+                                                >
+                                                    Global Stats
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                >
+                                                    Contact Channel
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                >
+                                                    Events Unassigned
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                >
+                                                    Events Assigned
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                >
+                                                    Placeholder
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                >
+                                                    Placeholder
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                >
+                                                    Placeholder
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Card>
+                    </Grid>
+                    <Grid size={{xs: 12, sm:4}}>
+                        <Card
+                            align='center'
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column',
+                                height: '100%',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <TableContainer
+                                component={Paper}
+                                sx={{
+                                    width: '90%',
+                                    mt: 1,
+                                }}
+                                key='crd2_table_container'
+                            >
+                                <Table key='crd2_table'>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell 
+                                                colSpan={3}
+                                                align='center'
+                                                sx={{
+                                                    py: 1
+                                                }}
+                                            >
+                                                <Typography 
+                                                    variant='h5'
+                                                    sx = {{
+                                                        mt: 1,
+                                                    }}
+                                                >
+                                                    {agentDetails.FIRSTNAME}'s Stats
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                >
+                                                    Contact Channel
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                >
+                                                    non-Closed Events 
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                >
+                                                    Closed Events
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                >
+                                                    Placeholder
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                >
+                                                    Placeholder
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                >
+                                                    Placeholder
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Card>
+                    </Grid>
+                    <Grid size={{xs: 12, sm:4}}>
+                        <Card
+                            align='center'
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                flexDirection: 'column',
+                                height: '100%',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <TableContainer
+                                component={Paper}
+                                sx={{
+                                    width: '90%',
+                                    mt: 1,
+                                }}
+                                key='crd3_table_container'
+                            >
+                                <Table key='crd3_table'>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell
+                                                colSpan={3}
+                                                align='center'
+                                                sx={{
+                                                    py: 1
+                                                }}
+                                            >
+                                                <Typography 
+                                                    variant='h5'
+                                                    sx = {{
+                                                        mt: 1,
+                                                    }}
+                                                >
+                                                    Oldest Open Events Assigned to {agentDetails.FIRSTNAME}
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Card>
+                    </Grid>
+                </Grid>
         </>
     )
 }
