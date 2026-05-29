@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { z } = require('zod');
 const { validate } = require('../middleware/validate');
-const { login, reset_password } = require('../controllers/auth.controller');
+const { login, reset_password, agent_details } = require('../controllers/auth.controller');
 
 
 const loginSchema = z.object({
@@ -14,7 +14,12 @@ const resetPasswordSchema = z.object({
     id: z.string(),
 })
 
+const agentDetailsSchema = z.object({
+    id: z.string(),
+})
+
 router.post('/login', validate(loginSchema), login);
 router.post('/reset_password', validate(resetPasswordSchema), reset_password);
+router.post('/agent_details', validate(agentDetailsSchema), agent_details);
 
 module.exports = router;

@@ -20,4 +20,11 @@ async function resetPassword(password, id) {
     // console.log(results[0]);
 }
 
-module.exports = { findAgentByUsername, resetPassword };
+async function fetchAgentDetails(id) {
+    const results = await db.query(
+        `call sp_FetchAgentDetails(?)`, [id]
+    );
+    return results[0] || null;
+}
+
+module.exports = { fetchAgentDetails, findAgentByUsername, resetPassword };

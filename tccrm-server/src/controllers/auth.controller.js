@@ -3,14 +3,15 @@ const jwt = require('jsonwebtoken');
 const { env } = require('../config/env');
 const { asyncHandler } = require('../utils/asyncHandler');
 
-const { findAgentByUsername, resetPassword } = require('../models/users.model');
+const { fetchAgentDetails, findAgentByUsername, 
+    resetPassword } = require('../models/users.model');
 
 // agent login 
 const login = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
-    console.log(username, password);
+    // console.log(username, password);
     const user = await findAgentByUsername(username);
-    console.log(user);
+    // console.log(user);
 
     if (!user) {
         const err = new Error('Invalid details. Please try again, or contact IT!');
@@ -37,13 +38,23 @@ const login = asyncHandler(async (req, res) => {
 // reset agent password
 const reset_password = asyncHandler(async (req, res) => {
     const { password, id } = req.body;
-    console.log(password, id)
+    // console.log(password, id)
     const passwordHash = await bcrypt.hash(password, 10);
-    console.log(passwordHash);
+    // console.log(passwordHash);
     const results = await resetPassword(passwordHash, id)
 
-    res.json({ ok: true })
+    res.json({ ok: true})
+})
+
+// fetch agents details to be used for greeting on dashboard
+const agent_details = asyncHandler(async (req, res) => {
+    const id = Number(req.body.id)
+    // console.log(id);
+    const results = await fetchAgentDetails(id);
+    // console.log(results);
+
+    res.json({ ok: true, results });
 })
 
 
-module.exports = { login, reset_password };
+module.exports = { login, reset_password, agent_details };
