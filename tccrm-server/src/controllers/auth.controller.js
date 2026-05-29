@@ -41,6 +41,8 @@ const reset_password = asyncHandler(async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 10);
     console.log(passwordHash);
     const results = await resetPassword(passwordHash, id)
+
+    res.json({ ok: true })
 })
 
 

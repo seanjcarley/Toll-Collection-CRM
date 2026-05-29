@@ -13,10 +13,11 @@ async function findAgentByUsername(username) {
 async function resetPassword(password, id) {
     console.log('user,models: ', password);
     const [results] = await db.query(
-        `call sp_ResetAgentPassword(?, ?)`, [password, id]
+        `call sp_ResetAgentPassword(?, ?)`, [password, Number(id)]
     );
 
     return results[0] || null
+    // console.log(results[0]);
 }
 
 module.exports = { findAgentByUsername, resetPassword };

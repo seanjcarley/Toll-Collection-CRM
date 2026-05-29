@@ -25,9 +25,7 @@ export default function App() {
         <Route
           path='/reset_password'
           element={
-            <RequireAuth>
-              <ResetPasswordPage />
-            </RequireAuth>
+            <ResetPasswordPage />
           }
         />
         <Route

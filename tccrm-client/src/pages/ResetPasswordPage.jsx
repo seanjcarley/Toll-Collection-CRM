@@ -13,7 +13,7 @@ export default function ResetPasswordPage() {
 
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const id = localStorage.getItem('id');
+    const [agentId, setAgentId] = useState('');
     const [loading, setLoading] = useState('');
     const [error, setError] = useState('');
 
@@ -26,7 +26,7 @@ export default function ResetPasswordPage() {
             if (confirmPassword === password) {
                 const payload = {
                     password: password,
-                    id: id,
+                    id: agentId,
                 }
 
                 await apiFetch('/api/auth/reset_password', {
@@ -63,7 +63,7 @@ export default function ResetPasswordPage() {
                 >
                     <Typography
                         variant='h3'
-                        align='canter'
+                        align='center'
                         color='primary'
                         sx={{
                             mt: 2,
@@ -79,7 +79,7 @@ export default function ResetPasswordPage() {
                             mt:2,
                         }}
                     >
-                        Enter your new password below.
+                        Enter your new password and Agent ID below.
                     </Typography>
 
                     { error && (
@@ -113,6 +113,15 @@ export default function ResetPasswordPage() {
                             label='Confirm Password'
                             type='password'
                             onChange={ e => setConfirmPassword(e.target.value) }
+                        />
+                        <TextField
+                            fullWidth
+                            required
+                            sx={{
+                                mt: 3,
+                            }}
+                            label='Agent ID'
+                            onChange={ e => setAgentId(e.target.value) }
                         />
                         <Button
                             variant='contained'
