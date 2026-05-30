@@ -34,8 +34,10 @@ const AuthNavbar = ({ onMenuClick}) => {
                 >
                     <Button
                         color='inherit'
+                        component={ Link }
+                        to='/new_contact'
                     >
-                        Search
+                        New Contact
                     </Button>
                     <Button
                         color='inherit'

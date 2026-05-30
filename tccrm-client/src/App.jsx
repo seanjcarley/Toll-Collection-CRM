@@ -5,6 +5,7 @@ import { BrowserRouter as Router ,generatePath, Navigate, Route,
 import LoginPage from './pages/LoginPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import AgentDashboardPage from './pages/AgentDashboardPage';
+import NewContactPage from './pages/NewContactPage';
 
 const Redirect = ({ to }) => {
   const params = useParams();
@@ -36,7 +37,15 @@ export default function App() {
             </RequireAuth>
           }
         />
-      </Routes>
+        <Route
+            path='/new_contact'
+            element= {
+              <RequireAuth>
+                <NewContactPage />
+              </RequireAuth>
+            }
+          />
+        </Routes>
     </AuthProvider>
   );
 }

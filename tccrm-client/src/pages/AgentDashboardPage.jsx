@@ -106,7 +106,7 @@ export default function AgentDashboardPage() {
 
     return(
         <>
-            <AuthNavbar onMenuClick={ () => StereoPannerNode(true) }/>
+            <AuthNavbar onMenuClick={ () => setOpen(true) }/>
             <Box
                 align='center'
                 sx={{
@@ -365,13 +365,35 @@ export default function AgentDashboardPage() {
                             </Table>
                         </TableContainer>
                         <Box>
-                            <Button>
-                                Go to List
+                            <Button
+                                variant='contained'
+                                color='secondary'
+                                sx={{
+                                    m: 2,
+                                }}
+                                onClick={ () => {}}
+                            >
+                                Go To Customer Contacts
                             </Button>
+                            { isAuthed && (
+                                <Button
+                                    variant='outlined'
+                                    color='secondary'
+                                    sx={{
+                                        m: 2,
+                                    }}
+                                    onClick={ () => {
+                                        logout();
+                                        nav('/');
+                                    }}
+                                >
+                                Logout
+                                </Button>
+                            )}
                         </Box>
                     </Card>
                 </Grid>
             </Grid>
         </>
-    )
-}
+    );
+};

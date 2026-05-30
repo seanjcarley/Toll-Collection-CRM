@@ -24,7 +24,7 @@ export default function LoginPage() {
             // console.log('Username: ',username)
             // console.log('Password: ',password)
             await login(username, password);
-            nav(`/agent_dashboard`);
+            nav(``);
         } catch (err) {
             setError(err.message);
         } finally {

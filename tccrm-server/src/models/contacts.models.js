@@ -20,4 +20,14 @@ async function fetchAgentStats(id) {
     return rows[0] || null;
 }
 
-module.exports = { fetchGlobalStats, fetchAgentStats };
+async function fetchContactChannels() {
+    const [rows] = await db.query(
+        `select MEDADATADESC 
+        from meta_data 
+        where METADATAPARENTID = 8`
+    );
+    // console.log('models: ', rows)
+    return rows || null;
+}
+
+module.exports = { fetchGlobalStats, fetchAgentStats, fetchContactChannels };
