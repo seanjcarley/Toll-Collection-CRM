@@ -23,6 +23,8 @@ export default function AgentDashboardPage() {
 
     // variable for agent details
     const [agentDetails, setAgentDetails] = useState([]);
+    const [agentStats, setAgentStats] = useState([]);
+    const [globalStats, setGlobalStats] = useState([]);
 
     // set the token and id variables
     const token = localStorage.getItem('token');
@@ -53,6 +55,49 @@ export default function AgentDashboardPage() {
             }
         }
         fetchAgentDetails();
+            
+        async function fetchGlobalStats(e) {
+            setError('');
+            setLoading(true);
+
+            try {
+                const data = await apiFetch('/api/contacts/fetch_global', {
+                    method: 'POST',
+                    auth: true,
+                });
+                // console.log(data.results);
+                setGlobalStats(data.results);
+            } catch (err) {
+                setError(err.message || 'Failed to retrieve global stats!');
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchGlobalStats();
+
+        async function fetchAgentStats(e) {
+            setError('');
+            setLoading(true);
+
+            try {
+                const payload = {
+                    id: agentId,
+                }
+
+                const data = await apiFetch('/api/contacts/fetch_agent', {
+                    method: 'POST',
+                    auth: true,
+                    body: payload,
+                });
+                console.log(data.results);
+                setAgentStats(data.results);
+            } catch (err) {
+                setError(err.message || 'Failed to retrieve global stats!');
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchAgentStats();
     }, []);
 
     if (loading) return <Box sx={{ textAlign: 'center', mt: 10,  }} >
@@ -77,17 +122,17 @@ export default function AgentDashboardPage() {
                     }}
                 >
                     <Typography
-                        variant='h2'
+                        variant='h4'
                         align='center'
                         color='secondary'
                         sx={{
-                            mt: 2,
+                            mt: 1,
                         }}
                     >
                         Agent Dashboard
                     </Typography>
                     <Typography
-                        variant="h4"
+                        variant="h5"
                         align="center"
                         color="secondary"
                         sx={{
@@ -98,55 +143,67 @@ export default function AgentDashboardPage() {
                     </Typography>
                 </Paper>
             </Box>
-                <Grid
-                    Container
-                    spacing={1}
-                >
-                    <Grid size={{xs: 12, sm:4}}>
-                        <Card
-                            align='center'
+            <Grid
+                container
+                spacing={1}
+                sx={{
+                    mt: 2,
+                }}
+            >
+                <Grid size={{xs: 12, sm:6}}>
+                    <Card
+                        align='center'
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            flexDirection: 'column',
+                            height: '100%',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <TableContainer
+                            component={Paper}
                             sx={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                flexDirection: 'column',
-                                height: '100%',
-                                alignItems: 'center',
+                                width: '90%',
+                                m: 1,
                             }}
+                            key='crd1_table_container'
                         >
-                            <TableContainer
-                                component={Paper}
-                                sx={{
-                                    width: '90%',
-                                    mt: 1,
-                                }}
-                                key='crd1_table_container'
-                            >
-                                <Table key='crd1_table'>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell 
-                                                colSpan={3}
-                                                align='center'
-                                                sx={{
-                                                    py: 1
+                            <Table key='crd1_table'>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell 
+                                            colSpan={4}
+                                            align='center'
+                                            sx={{
+                                                py: 1
+                                            }}
+                                        >
+                                            <Typography 
+                                                variant='h5'
+                                                sx = {{
+                                                    mt: 1,
                                                 }}
                                             >
-                                                <Typography 
-                                                    variant='h5'
-                                                    sx = {{
-                                                        mt: 1,
-                                                    }}
-                                                >
-                                                    Global Stats
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        <TableRow>
+                                                Global Stats
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
                                             <TableCell>
                                                 <Typography
                                                     variant='body1'
+                                                    align='center'
+                                                >
+                                                    Status
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                    align='center'
                                                 >
                                                     Contact Channel
                                                 </Typography>
@@ -154,189 +211,167 @@ export default function AgentDashboardPage() {
                                             <TableCell>
                                                 <Typography
                                                     variant='body1'
-                                                >
-                                                    Events Unassigned
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography
-                                                    variant='body1'
+                                                    align='center'
                                                 >
                                                     Events Assigned
                                                 </Typography>
                                             </TableCell>
-                                        </TableRow>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                    align='center'
+                                                >
+                                                    Events Unassigned
+                                                </Typography>
+                                            </TableCell>
+                                    </TableRow>
+                                    {globalStats.map((stats) => (
                                         <TableRow>
                                             <TableCell>
                                                 <Typography
-                                                    variant='body1'
+                                                    variant='body2'
+                                                    align='center'
                                                 >
-                                                    Placeholder
+                                                    {stats.Status}
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
                                                 <Typography
-                                                    variant='body1'
+                                                    variant='body2'
+                                                    align='center'
                                                 >
-                                                    Placeholder
+                                                    {stats.ActivityChannel}
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
                                                 <Typography
-                                                    variant='body1'
+                                                    variant='body2'
+                                                    align='center'
                                                 >
-                                                    Placeholder
+                                                    {stats.Assigned}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body2'
+                                                    align='center'
+                                                >
+                                                    {stats.Unassigned}
                                                 </Typography>
                                             </TableCell>
                                         </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Card>
-                    </Grid>
-                    <Grid size={{xs: 12, sm:4}}>
-                        <Card
-                            align='center'
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                flexDirection: 'column',
-                                height: '100%',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <TableContainer
-                                component={Paper}
-                                sx={{
-                                    width: '90%',
-                                    mt: 1,
-                                }}
-                                key='crd2_table_container'
-                            >
-                                <Table key='crd2_table'>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell 
-                                                colSpan={3}
-                                                align='center'
-                                                sx={{
-                                                    py: 1
-                                                }}
-                                            >
-                                                <Typography 
-                                                    variant='h5'
-                                                    sx = {{
-                                                        mt: 1,
-                                                    }}
-                                                >
-                                                    {agentDetails.FIRSTNAME}'s Stats
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        <TableRow>
-                                            <TableCell>
-                                                <Typography
-                                                    variant='body1'
-                                                >
-                                                    Contact Channel
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography
-                                                    variant='body1'
-                                                >
-                                                    non-Closed Events 
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography
-                                                    variant='body1'
-                                                >
-                                                    Closed Events
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell>
-                                                <Typography
-                                                    variant='body1'
-                                                >
-                                                    Placeholder
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography
-                                                    variant='body1'
-                                                >
-                                                    Placeholder
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography
-                                                    variant='body1'
-                                                >
-                                                    Placeholder
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Card>
-                    </Grid>
-                    <Grid size={{xs: 12, sm:4}}>
-                        <Card
-                            align='center'
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                flexDirection: 'column',
-                                height: '100%',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <TableContainer
-                                component={Paper}
-                                sx={{
-                                    width: '90%',
-                                    mt: 1,
-                                }}
-                                key='crd3_table_container'
-                            >
-                                <Table key='crd3_table'>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell
-                                                colSpan={3}
-                                                align='center'
-                                                sx={{
-                                                    py: 1
-                                                }}
-                                            >
-                                                <Typography 
-                                                    variant='h5'
-                                                    sx = {{
-                                                        mt: 1,
-                                                    }}
-                                                >
-                                                    Oldest Open Events Assigned to {agentDetails.FIRSTNAME}
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        <TableRow>
-                                            <TableCell>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Card>
-                    </Grid>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Card>
                 </Grid>
+                <Grid size={{xs: 12, sm:6}}>
+                    <Card
+                        align='center'
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            flexDirection: 'column',
+                            height: '100%',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <TableContainer
+                            component={Paper}
+                            sx={{
+                                width: '90%',
+                                m: 1,
+                            }}
+                            key='crd1_table_container'
+                        >
+                            <Table key='crd1_table'>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell 
+                                            colSpan={4}
+                                            align='center'
+                                            sx={{
+                                                py: 1
+                                            }}
+                                        >
+                                            <Typography 
+                                                variant='h5'
+                                                sx = {{
+                                                    mt: 1,
+                                                }}
+                                            >
+                                                {agentDetails.FIRSTNAME} {agentDetails.SURNAME}'s Stats
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Typography
+                                                variant='body1'
+                                                align='center'
+                                            >
+                                                Status
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                variant='body1'
+                                                align='center'
+                                            >
+                                                Contact Channel
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                variant='body1'
+                                                align='center'
+                                            >
+                                                Events Assigned
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                    {agentStats.map((stats) => (
+                                        <TableRow>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                    align='center'
+                                                >
+                                                    {stats.Status}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                    align='center'
+                                                >
+                                                    {stats.ActivityChannel}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography
+                                                    variant='body1'
+                                                    align='center'
+                                                >
+                                                    {stats.Assigned}
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <Box>
+                            <Button>
+                                Go to List
+                            </Button>
+                        </Box>
+                    </Card>
+                </Grid>
+            </Grid>
         </>
     )
 }

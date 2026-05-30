@@ -11,7 +11,7 @@ async function findAgentByUsername(username) {
 
 // reset agent password
 async function resetPassword(password, id) {
-    console.log('user,models: ', password);
+    // console.log('user,models: ', password);
     const [results] = await db.query(
         `call sp_ResetAgentPassword(?, ?)`, [password, Number(id)]
     );
