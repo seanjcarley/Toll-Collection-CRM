@@ -107,49 +107,7 @@ export default function NewContactPage() {
                     mt: 2,
                 }}
             >
-                <Grid size={{xs: 12, sm:4}}>
-                    <Card
-                        align='center'
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            flexDirection: 'column',
-                            height: '100%',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Stack
-                            component='form'
-                            spacing={1}
-                            onSubmit={ onSubmit }
-                            sx={{
-                                m: 2,
-                            }}
-                        >
-                            <Typography
-                                variant='h5'
-                                align='left'
-                                color='primary'
-                                sx={{
-                                    mt: 2,
-                                }}
-                            >
-                                Contact Information:
-                            </Typography>
-                            <Select
-                                label='Channel'
-                                onChange={handleSelectChange}
-                            >
-                                {contactChannels.map((channels) => (
-                                    <MenuItem value={channels.MEDADATADESC}>
-                                        {channels.MEDADATADESC}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </Stack>
-                    </Card>
-                </Grid>
-                <Grid size={{xs: 12, sm:4}}>
+                <Grid size={{xs: 12, sm:6}}>
                     <Card
                         align='center'
                         sx={{
@@ -225,10 +183,17 @@ export default function NewContactPage() {
                                 label='Vehicle Registration Number'
                                 required
                             />
+                            <Button
+                                id="vehicle-search-btn"
+                                variant="contained"
+                                color="primary"
+                            >
+                                Check Vehicle Details
+                            </Button>
                         </Stack>
                     </Card>
                 </Grid>
-                <Grid size={{xs: 12, sm:4}}>
+                <Grid size={{xs: 12, sm:6}}>
                     <Card
                         align='center'
                         sx={{
@@ -239,12 +204,9 @@ export default function NewContactPage() {
                             alignItems: 'center',
                         }}
                     >
-                        <Stack
-                            component='form'
-                            spacing={1}
-                            onSubmit={ onSubmit }
+                        <Box
                             sx={{
-                                m: 2,
+                                width: '90%',
                             }}
                         >
                             <Typography
@@ -261,9 +223,23 @@ export default function NewContactPage() {
                                 minRows={8}
                                 maxRows={20}
                                 defaultValue="Enter the details relating to the customer's query"
-                                style={{width: '100%'}}
+                                style={{width: '80%'}}
                             />
-                        </Stack>
+                            <Select
+                                label='Channel'
+                                onChange={handleSelectChange}
+                                sx={{
+                                    width: '80%',
+                                    mt: 2,
+                                }}
+                            >
+                                {contactChannels.map((channels) => (
+                                    <MenuItem value={channels.MEDADATADESC}>
+                                        {channels.MEDADATADESC}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </Box>
                     </Card>
                 </Grid>
             </Grid>
