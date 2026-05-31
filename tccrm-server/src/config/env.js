@@ -1,9 +1,9 @@
 // src/config/env.js
 
-const path = require('path');
-require('dotenv').config({
-    path: path.join(__dirname, '../../.env'),
-});
+// const path = require('path');
+// require('dotenv').config({
+//     path: path.join(__dirname, '../../.env'),
+// });
 
 const env = {
     PORT: process.env.PORT || 5000,
