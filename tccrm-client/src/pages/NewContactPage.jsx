@@ -23,43 +23,69 @@ export default function NewContactPage() {
     //variables
     const [contactChannels, setContactChannels] = useState([]);
     const [channel, setChannel] = useState('');
+    const [email,setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [fname, setFname] = useState('');
+    const [surname, setSurname] = useState('');
+    const [vrn, setVrn] = useState('');
+    const [query, setQuery] = useState('');
 
+    // get the list of contact channels
+    useEffect (() => {
+        async function fetchContactChannels(e) {
+            setError('');
+            setLoading(true);
+
+            try {
+                const data = await apiFetch('/api/contacts/fetch_channels', {
+                    method: 'POST',
+                    auth: true,
+                });
+                // console.log(data.results)
+                setContactChannels(data.results);
+            } catch (err) {
+                setError(err.message || 'Failed to retrieve channel details!')
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchContactChannels();
+        // console.log(contactChannels);
+    }, []);
+
+    // set the list of contact channels
     const handleSelectChange = (e) => {
         setChannel(e.target.value);
     };
 
-    useEffect (() => {
-            async function fetchContactChannels(e) {
-                setError('');
-                setLoading(true);
-    
-                try {
-                    const data = await apiFetch('/api/contacts/fetch_channels', {
-                        method: 'POST',
-                        auth: true,
-                    });
-                    // console.log(data.results)
-                    setContactChannels(data.results);
-                } catch (err) {
-                    setError(err.message || 'Failed to retrieve channel details!')
-                } finally {
-                    setLoading(false);
-                }
-            }
-            fetchContactChannels();
-            // console.log(contactChannels);
-        }, []);
-
-    async function onSubmit (e) {
-        e.preventDefault();
+    async function submitContact (e) {
+        // e.preventDefault();
         setError('');
         setLoading(true);
 
         try {
-            // console.log('Username: ',username)
-            // console.log('Password: ',password)
-            await login(username, password);
-            nav(``);
+            console.log(email);
+            console.log(vrn);
+            console.log(channel);
+            
+            if (email !== '' && vrn !== '' && channel !== 'select') {
+                const payload = {
+                    email: email,
+                    phone: phone,
+                    fname: fname,
+                    surname: surname,
+                    vrn: vrn,
+                    query: query,
+                    channel: channel,
+                    id: agentId,
+                }
+                console.log(payload);
+                await apiFetch('/api/contacts/submit_contact', {
+                    method: 'POST',
+                    auth: true,
+                    body: payload,
+                })
+            }
         } catch (err) {
             setError(err.message);
         } finally {
@@ -121,7 +147,6 @@ export default function NewContactPage() {
                         <Stack
                             component='form'
                             spacing={1}
-                            onSubmit={ onSubmit }
                             sx={{
                                 m: 2,
                             }}
@@ -143,6 +168,7 @@ export default function NewContactPage() {
                                 }}
                                 label='Email Address'
                                 required
+                                onChange={ e => setEmail(e.target.value) }
                             />
                             <TextField
                                 fullWidth
@@ -150,6 +176,7 @@ export default function NewContactPage() {
                                     mt: 3,
                                 }}
                                 label='Phone Number'
+                                onChange={ e => setPhone(e.target.value) }
                             />
                             <TextField
                                 fullWidth
@@ -157,6 +184,7 @@ export default function NewContactPage() {
                                     mt: 3,
                                 }}
                                 label='First Name'
+                                onChange={ e => setFname(e.target.value) }
                             />
                             <TextField
                                 fullWidth
@@ -164,6 +192,7 @@ export default function NewContactPage() {
                                     mt: 3,
                                 }}
                                 label='Surname'
+                                onChange={ e => setSurname(e.target.value) }
                             />
                             <Typography
                                 variant='h5'
@@ -182,6 +211,7 @@ export default function NewContactPage() {
                                 }}
                                 label='Vehicle Registration Number'
                                 required
+                                onChange={ e => setVrn(e.target.value) }
                             />
                             <Button
                                 id="vehicle-search-btn"
@@ -224,22 +254,41 @@ export default function NewContactPage() {
                                 maxRows={20}
                                 defaultValue="Enter the details relating to the customer's query"
                                 style={{width: '80%'}}
+                                onChange={ e => setQuery(e.target.value) }
                             />
-                            <Select
+                            <br/>
+                            <TextField
+                                select
                                 label='Channel'
+                                style={{width: '80%'}}
                                 onChange={handleSelectChange}
+                                defaultValue={'select'}
+                                align='left'
                                 sx={{
-                                    width: '80%',
-                                    mt: 2,
+                                    mt:2,
                                 }}
+                                helperText='Please select the method of contact'
                             >
+                                <MenuItem key='select' value={'select'}>
+                                    Select
+                                </MenuItem>
                                 {contactChannels.map((channels) => (
-                                    <MenuItem value={channels.MEDADATADESC}>
+                                    <MenuItem key={channels.MEDADATADESC} value={channels.MEDADATADESC}>
                                         {channels.MEDADATADESC}
                                     </MenuItem>
                                 ))}
-                            </Select>
+                            </TextField>
                         </Box>
+                        <Button
+                                variant="contained"
+                                color="secondary"
+                                sx={{
+                                    m: 2,
+                                }}
+                                onClick={submitContact}
+                            >
+                                Add Contact
+                            </Button>
                     </Card>
                 </Grid>
             </Grid>

@@ -1,6 +1,7 @@
 const { env } = require('../config/env');
 const { asyncHandler } = require('../utils/asyncHandler');
-const { fetchGlobalStats, fetchAgentStats, fetchContactChannels } = require('../models/contacts.models');
+const { fetchGlobalStats, fetchAgentStats, fetchContactChannels, 
+    submitContact } = require('../models/contacts.models');
 
 const fetch_global = asyncHandler(async (req, res) => {
     const results = await fetchGlobalStats();
@@ -23,4 +24,13 @@ const fetch_channels = asyncHandler(async (req, res) => {
     res.status(200).json({ ok: true, results });
 })
 
-module.exports = { fetch_global, fetch_agent, fetch_channels };
+const submit_contact = asyncHandler(async (req, res) => {
+    const { email, phone, fname, surname, vrn, query, channel, id } = req.body
+    const results = await submitContact(
+        email, phone, fname, surname, vrn, query, channel, id);
+
+    res.status(200).json({ ok: true });
+
+})
+
+module.exports = { fetch_global, fetch_agent, fetch_channels, submit_contact };
